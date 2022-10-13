@@ -4,7 +4,7 @@ import com.hellacloud.laikangning_sdk.converter.ProtobufMessageConverter
 import com.hellacloud.laikangning_sdk.lmtp.ReactiveLmtpClient
 import io.flutter.plugin.common.EventChannel
 
-class ReadHandler(mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
+class LmtpSendCommandHandler(val mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
 
     private var mReadSink: EventChannel.EventSink? = null
     private val converter = ProtobufMessageConverter()
@@ -21,10 +21,15 @@ class ReadHandler(mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
     }
 
     private fun startReadData() {
-
+        // 读取当前数据
+        mClient.setReadLMTPSendCommand(object : ReactiveLmtpClient.ReadLMTPSendCommand {
+            override fun sendData(bytesData: ByteArray?) {
+                mReadSink?.success(bytesData)
+            }
+        })
     }
 
     private fun stopReadData() {
-
+        mReadSink = null
     }
 }

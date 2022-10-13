@@ -8,13 +8,14 @@ import java.io.File
 class ReactiveLmtpClient : LmtpClient {
 
     private var mLmtpDecoder: LMTPDecoder? = null
+    private var mListener: LMTPDListener? = null
 
     private val nullException = NullPointerException("need call initializeClient function")
 
     override fun initializeClient() {
         mLmtpDecoder = LMTPDecoder()
-        val lmtpdListener = LMTPDListener()
-        mLmtpDecoder?.setLMTPDecoderListener(lmtpdListener)
+        mListener = LMTPDListener()
+        mLmtpDecoder?.setLMTPDecoderListener(mListener)
         mLmtpDecoder?.prepare()
     }
 
@@ -58,18 +59,47 @@ class ReactiveLmtpClient : LmtpClient {
         mLmtpDecoder?.release() ?: throw nullException
     }
 
-    inner class LMTPDListener() : LMTPDecoderListener {
+    override fun setReadLMTPSendCommand(listener: ReadLMTPSendCommand) {
+        mListener?.readLMTPSendCommand = listener
+    }
+
+    override fun setReadLMTPFhrDataError(listener: ReadLMTPFhrErrorData) {
+        mListener?.fhrErrorData = listener
+    }
+
+    override fun setReadLMTPFhrChangeData(listener: ReadLMTPFhrChangeData) {
+        mListener?.fhrChangeData = listener
+    }
+
+    interface ReadLMTPSendCommand {
+        fun sendData(bytesData: ByteArray?)
+    }
+
+    interface ReadLMTPFhrChangeData {
+        fun getChange(fhrData: FhrData?)
+    }
+
+    interface ReadLMTPFhrErrorData {
+        fun getErrorData(errorCode: Int)
+    }
+
+    inner class LMTPDListener(
+        var readLMTPSendCommand: ReadLMTPSendCommand? = null,
+        var fhrChangeData: ReadLMTPFhrChangeData? = null,
+        var fhrErrorData: ReadLMTPFhrErrorData? = null
+    ) :
+        LMTPDecoderListener {
 
         override fun sendCommand(p0: ByteArray?) {
-            TODO("Not yet implemented")
+            readLMTPSendCommand?.sendData(p0)
         }
 
         override fun fhrDataChanged(p0: FhrData?) {
-            TODO("Not yet implemented")
+            fhrChangeData?.getChange(p0)
         }
 
         override fun fhrDataError(p0: Int) {
-            TODO("Not yet implemented")
+            fhrErrorData?.getErrorData(p0)
         }
 
     }
