@@ -44,3 +44,7 @@ android {
         minSdkVersion 16
     }
 }
+
+dependencies{
+    api(files('libs/lmtpd-v3.4-20200620.jar'))
+}
