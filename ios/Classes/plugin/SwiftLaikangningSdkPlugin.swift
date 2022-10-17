@@ -9,7 +9,7 @@ public class SwiftLaikangningSdkPlugin: NSObject, FlutterPlugin {
     private static let READ_FHR_ERROR_CHANNEL = "flutter_laikangyun_read_fhr_error_channel"
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let plugin = SwiftReactiveBlePlugin()
+        let plugin = PluginController()
         let methodChannel = FlutterMethodChannel(name: MAIN_CHANNEL_NAME, binaryMessenger: registrar.messenger())
         registrar.addMethodCallDelegate(plugin, channel: methodChannel)
         
