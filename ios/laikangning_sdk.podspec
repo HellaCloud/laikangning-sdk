@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes', 'Classes/**/*.{h,m,swift}'
-  s.vendored_libraries = 'Framework/lame.a', 'Framework/LMTPDecoder.a'
+  s.vendored_libraries = 'Framework/liblame.a', 'Framework/libLMTPDecoder.a'
   s.public_header_files = 'Framework/*.h'
 
   s.dependency 'Flutter'
