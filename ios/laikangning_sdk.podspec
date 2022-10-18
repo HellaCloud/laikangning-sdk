@@ -21,7 +21,8 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
 
-  s.vendored_libraries = 'Framework/*.a'
-  s.source_files = 'Framework/*.h'
+  s.static_framework = true
+  s.vendored_libraries = 'Classes/Framework/liblame.a', 'Classes/Framework/libLMTPDecoder.a'
+  s.source_files = 'Classes/Framework/*.h'
 
 end
