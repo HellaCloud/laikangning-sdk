@@ -13,8 +13,9 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes', 'Classes/**/*.{h,m,swift}', 'Framework/**/*.h'
+  s.source_files = 'Classes', 'Classes/**/*.{h,m,swift}'
   s.vendored_libraries = 'Framework/lame.a', 'Framework/LMTPDecoder.a'
+  s.public_header_files = 'Framework/*.h'
 
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
