@@ -1,30 +1,13 @@
 //
-//  PluginController.swift
-//  laikangning_sdk
-//
-//  Created by Mac on 14.10.22.
+// Created by 候帅 on 2022/10/18.
 //
 
 import Foundation
 
 final class PluginController {
-    
-    
-    func initialize(name: String, completion: @escaping PlatformMethodCompletionHandler) {
-        // 进行初始化逻辑
-        
-        
+
+
+    func initialize(name: FlutterMethodCall, completion: @escaping FlutterResult) {
+
     }
-    
-    func deinitialize(name: String, completion: @escaping PlatformMethodCompletionHandler) {
-        
-    }
-    
-    func scanForDevices(name: String, args: ScanForDevicesRequest, completion: @escaping PlatformMethodCompletionHandler) {
-         
-    }
-    
-    
-    
-    
 }
