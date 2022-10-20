@@ -13,6 +13,12 @@ public class SwiftLaikangningSdkPlugin: NSObject, FlutterPlugin {
         let plugin = SwiftLaikangningSdkPlugin()
         let methodChannel = FlutterMethodChannel(name: MAIN_CHANNEL_NAME, binaryMessenger: registrar.messenger())
         registrar.addMethodCallDelegate(plugin, channel: methodChannel)
+
+        // 监听数据流进入
+
+
+
+
     }
 
 

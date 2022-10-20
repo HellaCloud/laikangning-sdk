@@ -101,8 +101,5 @@ class ReactiveLmtpClient : LmtpClient {
         override fun fhrDataError(p0: Int) {
             fhrErrorData?.getErrorData(p0)
         }
-
     }
-
-
 }

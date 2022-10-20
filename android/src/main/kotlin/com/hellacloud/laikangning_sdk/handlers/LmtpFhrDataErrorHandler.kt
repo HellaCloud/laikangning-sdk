@@ -3,7 +3,7 @@ package com.hellacloud.laikangning_sdk.handlers
 import com.hellacloud.laikangning_sdk.lmtp.ReactiveLmtpClient
 import io.flutter.plugin.common.EventChannel
 
-class LmtpFhrDataErrorHandler(val mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
+class LmtpFhrDataErrorHandler(private val mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
 
     private var mReadSink: EventChannel.EventSink? = null
 

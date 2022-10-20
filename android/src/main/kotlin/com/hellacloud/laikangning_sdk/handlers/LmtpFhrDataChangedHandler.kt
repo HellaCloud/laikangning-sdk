@@ -4,7 +4,7 @@ import com.hellacloud.laikangning_sdk.lmtp.ReactiveLmtpClient
 import com.luckcome.lmtpdecorder.data.FhrData
 import io.flutter.plugin.common.EventChannel
 
-class LmtpFhrDataChangedHandler(val mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
+class LmtpFhrDataChangedHandler(private val mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
 
     private var mReadSink: EventChannel.EventSink? = null
 
