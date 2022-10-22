@@ -1,0 +1,31 @@
+syntax = "proto3";
+option java_package = "com.hellacloud.laikangning_sdk.model";
+option java_outer_classname = "ProtobufModel";
+
+// 胎儿心跳相关
+message LknFhrData {
+  int32 fhr1 = 1;
+  int32 fhr2 = 2;
+  bytes toco = 3;
+  bytes afm = 4;
+  bytes fhrSignal = 5;
+  bytes afmFlag = 6;
+  bytes fmFlag = 7;
+  bytes tocoFlag = 8;
+  bytes docFlag = 9;
+  bytes devicePower = 10;
+  bytes isHaveFhr1 = 11;
+  bytes isHaveFhr2 = 12;
+  bytes isHaveToco = 13;
+  bytes isHaveAfm = 14;
+}
+
+// 胎儿心跳错误数据
+message LknFhrErrorData {
+  repeated bytes bytesData = 1;
+}
+
+// 胎儿心跳错误数据
+message LknSendData {
+  repeated bytes bytesData = 1;
+}

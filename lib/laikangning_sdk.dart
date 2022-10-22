@@ -1,8 +1,9 @@
 
-import 'laikangning_sdk_platform_interface.dart';
-
 class LaikangningSdk {
+  // TODO 进行整体的逻辑封装
+
+
   Future<String?> getPlatformVersion() {
-    return LaikangningSdkPlatform.instance.getPlatformVersion();
+    return Future(() => "");
   }
 }

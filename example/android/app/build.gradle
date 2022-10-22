@@ -62,6 +62,15 @@ android {
     }
 }
 
+sourceSets {
+    main {
+        kotlin {
+
+        }
+    }
+
+}
+
 flutter {
     source '../..'
 }

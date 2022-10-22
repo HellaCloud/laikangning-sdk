@@ -6,6 +6,7 @@ import com.hellacloud.laikangning_sdk.handlers.LmtpFhrDataChangedHandler
 import com.hellacloud.laikangning_sdk.handlers.LmtpFhrDataErrorHandler
 import com.hellacloud.laikangning_sdk.handlers.LmtpSendCommandHandler
 import com.hellacloud.laikangning_sdk.lmtp.ReactiveLmtpClient
+import com.hellacloud.laikangning_sdk.model.ProtobufModel.LknFhrData
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
