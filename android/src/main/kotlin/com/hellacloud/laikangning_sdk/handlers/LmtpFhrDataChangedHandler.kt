@@ -1,12 +1,15 @@
 package com.hellacloud.laikangning_sdk.handlers
 
+import com.hellacloud.laikangning_sdk.converter.ProtobufMessageConverter
 import com.hellacloud.laikangning_sdk.lmtp.ReactiveLmtpClient
 import com.luckcome.lmtpdecorder.data.FhrData
 import io.flutter.plugin.common.EventChannel
 
-class LmtpFhrDataChangedHandler(private val mClient: ReactiveLmtpClient) : EventChannel.StreamHandler {
+class LmtpFhrDataChangedHandler(private val mClient: ReactiveLmtpClient) :
+    EventChannel.StreamHandler {
 
     private var mReadSink: EventChannel.EventSink? = null
+    private val mProtobufMessageConverter: ProtobufMessageConverter = ProtobufMessageConverter()
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         events?.let {
@@ -23,7 +26,7 @@ class LmtpFhrDataChangedHandler(private val mClient: ReactiveLmtpClient) : Event
         // 读取当前数据
         mClient.setReadLMTPFhrChangeData(object : ReactiveLmtpClient.ReadLMTPFhrChangeData {
             override fun getChange(fhrData: FhrData?) {
-                mReadSink?.success(fhrData)
+                mReadSink?.success(mProtobufMessageConverter.convertFhrData(fhrData))
             }
         })
 
