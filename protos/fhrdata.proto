@@ -2,30 +2,69 @@ syntax = "proto3";
 option java_package = "com.hellacloud.laikangning_sdk.model";
 option java_outer_classname = "ProtobufModel";
 
-// 胎儿心跳相关
+// 协议内容封装
 message LknFhrData {
-  int32 fhr1 = 1;
-  int32 fhr2 = 2;
-  bytes toco = 3;
-  bytes afm = 4;
-  bytes fhrSignal = 5;
-  bytes afmFlag = 6;
-  bytes fmFlag = 7;
-  bytes tocoFlag = 8;
-  bytes docFlag = 9;
-  bytes devicePower = 10;
-  bytes isHaveFhr1 = 11;
-  bytes isHaveFhr2 = 12;
-  bytes isHaveToco = 13;
-  bytes isHaveAfm = 14;
+  message FhrData {
+    int32 fhr1 = 1;
+    int32 fhr2 = 2;
+    bytes toco = 3;
+    bytes afm = 4;
+    bytes fhrSignal = 5;
+    bytes afmFlag = 6;
+    bytes fmFlag = 7;
+    bytes tocoFlag = 8;
+    bytes docFlag = 9;
+    bytes devicePower = 10;
+    bytes isHaveFhr1 = 11;
+    bytes isHaveFhr2 = 12;
+    bytes isHaveToco = 13;
+    bytes isHaveAfm = 14;
+  }
+
+  // 胎儿心跳错误数据
+  message ErrorData {
+    bytes bytesData = 1;
+  }
+
+  // 胎儿心跳错误数据
+  message SendData {
+    bytes bytesData = 1;
+  }
+
+  enum StreamType {
+    FHR_DATA = 0;
+    FHR_ERROR = 1;
+    FHR_SEND = 2;
+  }
+
+  StreamType type = 1;
+
+  FhrData data = 2;
+
+  ErrorData error = 3;
+
+  SendData send = 4;
+
 }
 
-// 胎儿心跳错误数据
-message LknFhrErrorData {
-  repeated bytes bytesData = 1;
+
+// 放置数据
+message LknPutData {
+  bytes data = 1;
 }
 
-// 胎儿心跳错误数据
-message LknSendData {
-  repeated bytes bytesData = 1;
+// 开启记录声音
+message LknRecordWave {
+  string path = 1;
+  string fileName = 2;
+}
+
+// 发送胎监复位
+message LknTocoReset {
+  uint32 value = 1;
+}
+
+// 调整音量
+message LknFhrVolume {
+  uint32 value = 1;
 }

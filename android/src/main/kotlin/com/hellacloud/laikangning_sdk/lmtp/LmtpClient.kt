@@ -1,7 +1,9 @@
 package com.hellacloud.laikangning_sdk.lmtp
 
+import com.hellacloud.laikangning_sdk.handlers.LmtpFhrDataChangedHandler
+
 interface LmtpClient {
-    fun initializeClient()
+    fun initializeClient(mFhrDataChangeHandler: LmtpFhrDataChangedHandler?)
     fun startWork()
     fun stopWork()
     fun putData(data: ByteArray?)
@@ -11,7 +13,4 @@ interface LmtpClient {
     fun sendFM()
     fun sendFhrVolume(value: Int)
     fun deinitialClient()
-    fun setReadLMTPSendCommand(listener: ReactiveLmtpClient.ReadLMTPSendCommand)
-    fun setReadLMTPFhrDataError(readLMTPFhrErrorData: ReactiveLmtpClient.ReadLMTPFhrErrorData)
-    fun setReadLMTPFhrChangeData(readLMTPFhrChangeData: ReactiveLmtpClient.ReadLMTPFhrChangeData)
 }

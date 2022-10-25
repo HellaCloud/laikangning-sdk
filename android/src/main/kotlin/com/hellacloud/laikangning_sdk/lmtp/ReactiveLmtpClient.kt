@@ -1,22 +1,21 @@
 package com.hellacloud.laikangning_sdk.lmtp
 
+import com.hellacloud.laikangning_sdk.handlers.LmtpFhrDataChangedHandler
 import com.luckcome.lmtpdecorder.LMTPDecoder
-import com.luckcome.lmtpdecorder.LMTPDecoderListener
-import com.luckcome.lmtpdecorder.data.FhrData
 import java.io.File
 
 class ReactiveLmtpClient : LmtpClient {
 
     private var mLmtpDecoder: LMTPDecoder? = null
-    private var mListener: LMTPDListener? = null
 
     private val nullException = NullPointerException("need call initializeClient function")
 
-    override fun initializeClient() {
-        mLmtpDecoder = LMTPDecoder()
-        mListener = LMTPDListener()
-        mLmtpDecoder?.setLMTPDecoderListener(mListener)
-        mLmtpDecoder?.prepare()
+    override fun initializeClient(mFhrDataChangeHandler: LmtpFhrDataChangedHandler?) {
+        if (mLmtpDecoder == null) {
+            mLmtpDecoder = LMTPDecoder()
+            mLmtpDecoder?.setLMTPDecoderListener(mFhrDataChangeHandler)
+            mLmtpDecoder?.prepare()
+        }
     }
 
     override fun startWork() {
@@ -57,49 +56,7 @@ class ReactiveLmtpClient : LmtpClient {
 
     override fun deinitialClient() {
         mLmtpDecoder?.release() ?: throw nullException
+        mLmtpDecoder = null
     }
 
-    override fun setReadLMTPSendCommand(listener: ReadLMTPSendCommand) {
-        mListener?.readLMTPSendCommand = listener
-    }
-
-    override fun setReadLMTPFhrDataError(listener: ReadLMTPFhrErrorData) {
-        mListener?.fhrErrorData = listener
-    }
-
-    override fun setReadLMTPFhrChangeData(listener: ReadLMTPFhrChangeData) {
-        mListener?.fhrChangeData = listener
-    }
-
-    interface ReadLMTPSendCommand {
-        fun sendData(bytesData: ByteArray?)
-    }
-
-    interface ReadLMTPFhrChangeData {
-        fun getChange(fhrData: FhrData?)
-    }
-
-    interface ReadLMTPFhrErrorData {
-        fun getErrorData(errorCode: Int)
-    }
-
-    inner class LMTPDListener(
-        var readLMTPSendCommand: ReadLMTPSendCommand? = null,
-        var fhrChangeData: ReadLMTPFhrChangeData? = null,
-        var fhrErrorData: ReadLMTPFhrErrorData? = null
-    ) :
-        LMTPDecoderListener {
-
-        override fun sendCommand(p0: ByteArray?) {
-            readLMTPSendCommand?.sendData(p0)
-        }
-
-        override fun fhrDataChanged(p0: FhrData?) {
-            fhrChangeData?.getChange(p0)
-        }
-
-        override fun fhrDataError(p0: Int) {
-            fhrErrorData?.getErrorData(p0)
-        }
-    }
 }

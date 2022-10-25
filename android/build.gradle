@@ -54,7 +54,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
     }
 }
 
@@ -75,6 +75,10 @@ protobuf {
 }
 
 dependencies{
-    api(files('libs/lmtpd-v3.4-20200620.jar'))
+    api(files('libs/lmtpd-v3.5-20210927.jar'))
     implementation 'com.google.protobuf:protobuf-javalite:3.21.8'
+    implementation 'com.polidea.rxandroidble2:rxandroidble:1.16.0'
+    implementation 'com.google.protobuf:protobuf-javalite:3.21.8'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 }

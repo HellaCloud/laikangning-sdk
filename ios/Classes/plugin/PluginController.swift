@@ -4,88 +4,86 @@
 
 import Foundation
 import CoreBluetooth
+import Flutter
 
 final class PluginController {
 
     private var decoder: LMTPDecoder?
+    private var streamDelegate: StreamDelegate?
 
-    func initialize(name: FlutterMethodCall, completion: @escaping FlutterResult) {
+    func initialize(completion: @escaping PlatformMethodCompletionHandler) {
         // 进行相应的初始化逻辑
-        decoder = LMTPDecoder.shareInstance() as? LMTPDecoder
+        guard decoder != nil else {
+            decoder = LMTPDecoder.shareInstance() as? LMTPDecoder
+            // 添加对应的声明
+            return
+        }
+        completion(.success(nil))
     }
 
-    func deinitialize() {
+    func deinitialize(completion: @escaping PlatformMethodCompletionHandler) {
         guard let decoder = decoder else {
             print("not initialize")
             return
         }
-
         decoder.stopMoniter()
-
+        completion(.success(nil))
     }
 
-    func startWork() {
-
+    func startWork(completion: @escaping PlatformMethodCompletionHandler) {
+        decoder?.startRealTimeAudioPlyer()
+        completion(.success(nil))
     }
 
-    func stopWork() {
-
+    func setStreamDelegate(_ handler: StreamDelegate) {
+        streamDelegate = handler
     }
 
-    func putData(_ data: [UInt8]) {
-        let readData: Data = Data(bytes: data)
-        decoder?.start(withCharacterData: readData)
+    func stopWork(completion: @escaping PlatformMethodCompletionHandler) {
+        decoder?.stopRealTimeAudioPlyer()
+        completion(.success(nil))
     }
 
-    func beginRecordWave(_ path: String, _ fileName: String) {
+    func putData(args data: LknPutData, completion: @escaping PlatformMethodCompletionHandler) {
+        let data = decoder?.start(withCharacterData: data.data)
+        // 接口传递当前至内容 并推送至 流数据中。
+        guard let lknHeaderData = data else {
+            completion(.success(nil))
+            return
+        }
+        streamDelegate?.fhrData(withData: lknHeaderData)
+        completion(.success(nil))
+    }
+
+    func beginRecordWave(args data: LknRecordWave, completion: @escaping PlatformMethodCompletionHandler) {
         let fileManager = FileManager()
-        if !fileManager.fileExists(atPath: path) {
+        if !fileManager.fileExists(atPath: data.path) {
             do {
-                try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true)
+                try fileManager.createDirectory(atPath: data.path, withIntermediateDirectories: true)
             } catch {
                 print("file manager is error")
             }
         }
-        decoder?.startMonitor(withAudioFilePath: "\(path)/\(fileName)")
+        decoder?.startMonitor(withAudioFilePath: "\(data.path)/\(data.fileName)")
+        completion(.success(nil))
     }
 
-    func finishRecordWaves() {
+    func finishRecordWaves(completion: @escaping PlatformMethodCompletionHandler) {
         decoder?.stopMoniter()
+        completion(.success(nil))
     }
 
-    func sendTocoReset(_ value: Int, _ uuid: String, _ deviceName: String) {
-        // TODO 待修改当前逻辑内容
+    func sendTocoReset(args data: LknTocoReset, completion: @escaping PlatformMethodCompletionHandler) {
 
-        // 获取当前蓝牙连通设备
-        var peripheral: CBPeripheral? = nil
-        let centralManager = CBCentralManager()
-        let devices = centralManager.retrieveConnectedPeripherals(withServices: [CBUUID(string: uuid)])
-        for item in devices {
-            if (item.name == deviceName) {
-                peripheral = item
-            }
-        }
-        // 进行蓝牙数据写入操作
-        let write = peripheral?.services?[0].characteristics?[0]
-
-        decoder?.sendTocoReset(1, withTocoResetValue: 1, for: peripheral, with: write)
+        completion(.success(nil))
     }
 
-    func sendFM() {
+    func sendFM(completion: @escaping PlatformMethodCompletionHandler) {
         decoder?.setFM()
+        completion(.success(nil))
     }
 
-    func sendFhrVolume(_ value: Int) {
-//        decoder?.sendFhrValue(<#T##audioValue: Int32##Swift.Int32#>, for: <#T##CBPeripheral!##CBPeripheral!#>, with: <#T##CBCharacteristic!##CBCharacteristic!#>)
-
+    func sendFhrVolume(args data: LknFhrVolume, completion: @escaping PlatformMethodCompletionHandler) {
+        completion(.success(nil))
     }
-
-    func stopRealSound() {
-        decoder?.stopRealTimeAudioPlyer()
-    }
-
-    func startRealTimeAutoPlayer() {
-        decoder?.startRealTimeAudioPlyer()
-    }
-
 }
