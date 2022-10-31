@@ -43,13 +43,13 @@ extension Data {
     }
     var stringASCII: String? {
         get {
-            return NSString(data: self, encoding: String.Encoding.ascii.rawValue) as String?
+            NSString(data: self, encoding: String.Encoding.ascii.rawValue) as String?
         }
     }
 
     var stringUTF8: String? {
         get {
-            return NSString(data: self, encoding: String.Encoding.utf8.rawValue) as String?
+            NSString(data: self, encoding: String.Encoding.utf8.rawValue) as String?
         }
     }
 
@@ -96,7 +96,7 @@ extension UInt32 {
     }
 
     var byteArrayLittleEndian: [UInt8] {
-        return [
+        [
             UInt8((self & 0xFF000000) >> 24),
             UInt8((self & 0x00FF0000) >> 16),
             UInt8((self & 0x0000FF00) >> 8),

@@ -74,7 +74,7 @@ final class PluginController {
     }
 
     func sendTocoReset(args data: LknTocoReset, completion: @escaping PlatformMethodCompletionHandler) {
-
+        streamDelegate?.fhrSend(withByte: [85, -86, 10, -1, 1, 1, -1, -1, -1])
         completion(.success(nil))
     }
 
@@ -84,6 +84,9 @@ final class PluginController {
     }
 
     func sendFhrVolume(args data: LknFhrVolume, completion: @escaping PlatformMethodCompletionHandler) {
+        let value = data.value
+        streamDelegate?.fhrSend(withByte: [85, -86, 10, Int.init(value) + 0, -1, -1, -1, -1, -4 + Int.init(value)])
         completion(.success(nil))
     }
+
 }
