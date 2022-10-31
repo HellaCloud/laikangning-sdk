@@ -1,63 +1,110 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
+import 'dart:io';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:laikangning_sdk/laikangning_sdk.dart';
+import 'package:laikangning_sdk_example/src/ble/ble_device_connector.dart';
+import 'package:laikangning_sdk_example/src/ble/ble_device_interactor.dart';
+import 'package:laikangning_sdk_example/src/ble/ble_scanner.dart';
+import 'package:laikangning_sdk_example/src/ble/ble_status_monitor.dart';
+import 'package:laikangning_sdk_example/src/ui/ble_status_screen.dart';
+import 'package:laikangning_sdk_example/src/ui/device_list.dart';
+import 'package:provider/provider.dart';
+
+import 'src/ble/ble_logger.dart';
+
+const _themeColor = Colors.lightGreen;
 
 void main() {
-  runApp(const MyApp());
-}
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final _bleLogger = BleLogger();
+  final _ble = FlutterReactiveBle();
+  final _scanner = BleScanner(ble: _ble, logMessage: _bleLogger.addToLog);
+  final _monitor = BleStatusMonitor(_ble);
+  final _connector = BleDeviceConnector(
+    ble: _ble,
+    logMessage: _bleLogger.addToLog,
+  );
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  var laikangningSdk = LaikangningSdk();
+  laikangningSdk.initialize();
+  laikangningSdk.startWork();
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _laikangningSdkPlugin = LaikangningSdk();
+  laikangningSdk.getFhrData().listen((event) {
+    event.data.afm;
+    _bleLogger.addToLog('type: ${event.type.name} - '
+        'afm: ${event.data.afm} - '
+        'toco: ${event.data.toco} - '
+        'tocoFlag: ${event.data.tocoFlag}'
+        'fhr1: ${event.data.fhr1} - '
+        'fhr2: ${event.data.fhr2}'
+        'devicePower: ${event.data.devicePower}'
+        'afmFlag: ${event.data.afmFlag}'
+        'docFlag: ${event.data.docFlag}'
+        'fmFlag: ${event.data.fmFlag}');
+  });
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _laikangningSdkPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
+  final _serviceDiscoverer = BleDeviceInteractor(
+    laikangningSdk: laikangningSdk,
+    bleDiscoverServices: _ble.discoverServices,
+    readCharacteristic: _ble.readCharacteristic,
+    writeWithResponse: _ble.writeCharacteristicWithResponse,
+    writeWithOutResponse: _ble.writeCharacteristicWithoutResponse,
+    subscribeToCharacteristic: _ble.subscribeToCharacteristic,
+    logMessage: _bleLogger.addToLog,
+  );
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider.value(value: _scanner),
+        Provider.value(value: _monitor),
+        Provider.value(value: _connector),
+        Provider.value(value: _serviceDiscoverer),
+        Provider.value(value: _bleLogger),
+        StreamProvider<BleScannerState?>(
+          create: (_) => _scanner.state,
+          initialData: const BleScannerState(
+            discoveredDevices: [],
+            scanIsInProgress: false,
+          ),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        StreamProvider<BleStatus?>(
+          create: (_) => _monitor.state,
+          initialData: BleStatus.unknown,
         ),
+        StreamProvider<ConnectionStateUpdate>(
+          create: (_) => _connector.state,
+          initialData: const ConnectionStateUpdate(
+            deviceId: 'Unknown device',
+            connectionState: DeviceConnectionState.disconnected,
+            failure: null,
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Reactive BLE example',
+        color: _themeColor,
+        theme: ThemeData(primarySwatch: _themeColor),
+        home: const HomeScreen(),
       ),
-    );
-  }
+    ),
+  );
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Consumer<BleStatus?>(
+        builder: (_, status, __) {
+          if (status == BleStatus.ready) {
+            return const DeviceListScreen();
+          } else {
+            return BleStatusScreen(status: status ?? BleStatus.unknown);
+          }
+        },
+      );
 }

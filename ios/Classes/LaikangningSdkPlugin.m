@@ -8,6 +8,7 @@
 #import "laikangning_sdk-Swift.h"
 #endif
 
+
 @implementation LaikangningSdkPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   [SwiftLaikangningSdkPlugin registerWithRegistrar:registrar];

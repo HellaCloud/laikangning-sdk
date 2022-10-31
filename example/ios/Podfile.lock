@@ -2,20 +2,39 @@ PODS:
   - Flutter (1.0.0)
   - laikangning_sdk (0.0.1):
     - Flutter
+    - Protobuf (~> 3.21.8)
+    - SwiftProtobuf (~> 1.20.2)
+  - Protobuf (3.21.8)
+  - reactive_ble_mobile (0.0.1):
+    - Flutter
+    - Protobuf (~> 3.5)
+    - SwiftProtobuf (~> 1.0)
+  - SwiftProtobuf (1.20.2)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - laikangning_sdk (from `.symlinks/plugins/laikangning_sdk/ios`)
+  - reactive_ble_mobile (from `.symlinks/plugins/reactive_ble_mobile/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Protobuf
+    - SwiftProtobuf
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   laikangning_sdk:
     :path: ".symlinks/plugins/laikangning_sdk/ios"
+  reactive_ble_mobile:
+    :path: ".symlinks/plugins/reactive_ble_mobile/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  laikangning_sdk: 58bbfd408535e011750eeac240137f13dd10deca
+  laikangning_sdk: 7d0196352bff2cc1cc71f113ef63957fe55d00ef
+  Protobuf: 0a11f3000cd10ffa17611bf96e66a66b25c956e4
+  reactive_ble_mobile: 9ce6723d37ccf701dbffd202d487f23f5de03b4c
+  SwiftProtobuf: 9f458aaa7844a2fc0b910053e66578bc4e2da9c1
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 

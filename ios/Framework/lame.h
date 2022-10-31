@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* $Id: lame.h,v 1.189.2.1 2012/01/08 23:49:58 robert Exp $ */
+/* $Id: liblame.a.h,v 1.189.2.1 2012/01/08 23:49:58 robert Exp $ */
 
 #ifndef LAME_LAME_H
 #define LAME_LAME_H
@@ -240,7 +240,7 @@ int CDECL lame_get_analysis(const lame_global_flags *);
 int CDECL lame_set_bWriteVbrTag(lame_global_flags *, int);
 int CDECL lame_get_bWriteVbrTag(const lame_global_flags *);
 
-/* 1=decode only.  use lame/mpglib to convert mp3/ogg to wav.  default=0 */
+/* 1=decode only.  use liblame.a/mpglib to convert mp3/ogg to wav.  default=0 */
 int CDECL lame_set_decode_only(lame_global_flags *, int);
 int CDECL lame_get_decode_only(const lame_global_flags *);
 
@@ -265,7 +265,7 @@ int CDECL lame_get_quality(const lame_global_flags *);
 
 /*
   mode = 0,1,2,3 = stereo, jstereo, dual channel (not supported), mono
-  default: lame picks based on compression ration and input channels
+  default: liblame.a picks based on compression ration and input channels
 */
 int CDECL lame_set_mode(lame_global_flags *, MPEG_mode);
 MPEG_mode CDECL lame_get_mode(const lame_global_flags *);
@@ -339,7 +339,7 @@ int CDECL lame_get_nogap_currentindex(const lame_global_flags*);
  *       (void) vfprintf(stdout, format, ap);
  *   }
  * If you use NULL as the value of the pointer in the set function, the
- * lame buildin function will be used (prints to stderr).
+ * liblame.a buildin function will be used (prints to stderr).
  * To quiet any output you have to replace the body of the example function
  * with just "return;" and use it in the set function.
  */
@@ -466,14 +466,14 @@ int CDECL lame_set_preset_expopts(lame_global_flags *, int);
 /********************************************************************
  * Filtering control
  ***********************************************************************/
-/* freq in Hz to apply lowpass. Default = 0 = lame chooses.  -1 = disabled */
+/* freq in Hz to apply lowpass. Default = 0 = liblame.a chooses.  -1 = disabled */
 int CDECL lame_set_lowpassfreq(lame_global_flags *, int);
 int CDECL lame_get_lowpassfreq(const lame_global_flags *);
 /* width of transition band, in Hz.  Default = one polyphase filter band */
 int CDECL lame_set_lowpasswidth(lame_global_flags *, int);
 int CDECL lame_get_lowpasswidth(const lame_global_flags *);
 
-/* freq in Hz to apply highpass. Default = 0 = lame chooses.  -1 = disabled */
+/* freq in Hz to apply highpass. Default = 0 = liblame.a chooses.  -1 = disabled */
 int CDECL lame_set_highpassfreq(lame_global_flags *, int);
 int CDECL lame_get_highpassfreq(const lame_global_flags *);
 /* width of transition band, in Hz.  Default = one polyphase filter band */
@@ -597,7 +597,7 @@ int CDECL lame_get_size_mp3buffer( const lame_global_flags*  gfp );
 int CDECL lame_get_frameNum(const lame_global_flags *);
 
 /*
-  lame's estimate of the total number of frames to be encoded
+  liblame.a's estimate of the total number of frames to be encoded
    only valid if calling program set num_samples
 */
 int CDECL lame_get_totalframes(const lame_global_flags *);
@@ -673,7 +673,7 @@ void CDECL get_lame_version_numerical(lame_version_t *);
 
 /*
  * OPTIONAL:
- * print internal lame configuration to message handler
+ * print internal liblame.a configuration to message handler
  */
 void CDECL lame_print_config(const lame_global_flags*  gfp);
 
