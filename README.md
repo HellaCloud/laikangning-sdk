@@ -1,6 +1,10 @@
 # LKN SDK
 > 本仓库是服务于莱康宁 远程胎监设备 `eFM` 系列。
 
+[![LKN](https://img.shields.io/badge/home-莱康宁-brightgreen)](https://www.luckcome.com/solution_051.html)
+[![FLUTTER](https://img.shields.io/badge/dev-flutter-orange)](https://flutter.dev/)
+[![PLUGIN](https://img.shields.io/badge/plugin-v1.0.0-orange)](https://github.com/HellaCloud/laikangning-sdk)
+
 # 功能
 
 - 开启功能
